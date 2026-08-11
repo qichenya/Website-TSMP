@@ -157,24 +157,34 @@ onBeforeUnmount(() => {
   padding: calc(#{$appbar-height} + #{$spacing-xl}) $spacing-lg $spacing-3xl;
   
   // 建议 1：将固体深色顶栏与大自然背景图做融合
-  // 用一个带微弱冷紫/深黑调的渐变覆盖在背景图上，平滑过渡顶栏切线
-  background: 
-    linear-gradient(to bottom, rgba(15, 12, 25, 0.9) 0%, rgba(15, 12, 25, 0.6) 20%, rgba(15, 12, 25, 0.65) 100%),
-    url('https://rcn.zyghit.cn/images/lobby1.webp') center/cover no-repeat;
+	  // 用一个带微弱冷紫/深黑调的渐变覆盖在背景图上，平滑过渡顶栏切线
+	  background: 
+	    linear-gradient(to bottom, rgba(15, 12, 25, 0.9) 0%, rgba(15, 12, 25, 0.6) 20%, rgba(15, 12, 25, 0.65) 100%),
+	    url('https://rcn.zyghit.cn/images/lobby1.webp') center/cover no-repeat;
+
+	  // 浅色模式下隐藏背景图片和渐变遮罩，使用纯色背景
+	  [data-theme="light"] & {
+	    background: var(--md-sys-color-surface);
+	  }
 
   @include respond-to(md) {
     padding: calc(#{$appbar-height} + #{$spacing-2xl}) $spacing-xl $spacing-4xl;
   }
 
   // 这里的纯黑遮罩可以适当减轻，因为上面 background 已经叠加了复合滤镜
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 8, 16, 0.25);
-    z-index: 1;
-    pointer-events: none;
-  }
+	  &::before {
+	    content: '';
+	    position: absolute;
+	    inset: 0;
+	    background: rgba(10, 8, 16, 0.25);
+	    z-index: 1;
+	    pointer-events: none;
+	  }
+
+	  // 浅色模式下不需要遮罩
+	  [data-theme="light"] &::before {
+	    display: none;
+	  }
 
   &__bg {
     position: absolute;
@@ -195,8 +205,6 @@ onBeforeUnmount(() => {
   }
 
   &__title {
-    // 建议 3：大幅提升大标题明度和对比度！
-    // 混合一个极亮的浅粉紫，确保在暗色背景下作为绝对“视觉锚点”夺人眼球
     background: linear-gradient(135deg, #ffffff 30%, var(--md-sys-color-primary-container) 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -205,7 +213,13 @@ onBeforeUnmount(() => {
     font-size: clamp(46px, 8vw, 76px);
     line-height: 1.1;
     letter-spacing: -1.5px;
-    margin-bottom: $spacing-md; // 给品牌预留独立空间
+    margin-bottom: $spacing-md;
+
+    [data-theme="light"] & {
+      background: linear-gradient(135deg, var(--md-sys-color-primary), var(--md-sys-color-tertiary));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
   }
 
   &__tagline {
@@ -215,38 +229,56 @@ onBeforeUnmount(() => {
     letter-spacing: 0.5px;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
     margin-bottom: $spacing-xs;
+
+    [data-theme="light"] & {
+      color: var(--md-sys-color-on-surface);
+      text-shadow: none;
+    }
   }
 
   &__subtitle {
-    color: rgba(255, 255, 255, 0.75); // 稍微降低次要文本的视重
+    color: rgba(255, 255, 255, 0.75);
     font-weight: 400;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-    margin-bottom: $spacing-2xl; // 与下方 IP 盒子拉开充足的呼吸距离
+    margin-bottom: $spacing-2xl;
+
+    [data-theme="light"] & {
+      color: var(--md-sys-color-on-surface-variant);
+      text-shadow: none;
+    }
   }
 
   /* IP 地址展示盒子 */
   &__ip-box {
-    // 建议 4：重构毛玻璃物理质感 (Glassmorphism)
-    // 降低固体黑度(0.35 -> 0.25)，提升模糊度(8px -> 16px)，并注入环境饱和度，让背景草地“融化”进来
     background: rgba(15, 12, 25, 0.25);
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-    border-radius: var(--md-sys-shape-corner-extra-large); // 采用更现代的超大圆角
+    border-radius: var(--md-sys-shape-corner-extra-large);
     padding: $spacing-xl $spacing-2xl;
     width: 100%;
     max-width: 520px;
     @include flex-column;
     align-items: center;
     gap: $spacing-md;
+
+    [data-theme="light"] & {
+      background: var(--md-sys-color-surface-container);
+      border-color: var(--md-sys-color-outline-variant);
+      box-shadow: var(--md-sys-elevation-2);
+    }
   }
 
   &__ip-label {
-    color: rgba(255, 255, 255, 0.5); // 作为辅助性的小标签，降低亮度，腾出视觉核心
+    color: rgba(255, 255, 255, 0.5);
     font-size: 11px;
     letter-spacing: 2px;
     text-shadow: none;
+
+    [data-theme="light"] & {
+      color: var(--md-sys-color-on-surface-variant);
+    }
   }
 
   &__ip-row {
@@ -261,7 +293,6 @@ onBeforeUnmount(() => {
     font-family: 'Roboto Mono', monospace;
     font-size: 16px;
     font-weight: 600;
-    // 这里的背景和文字颜色配合暗色模式更高级，或者直接用亮白
     color: #ffffff;
     background: rgba(255, 255, 255, 0.08); 
     padding: $spacing-sm $spacing-xl;
@@ -271,6 +302,12 @@ onBeforeUnmount(() => {
     flex: 1;
     text-align: center;
     max-width: 280px;
+
+    [data-theme="light"] & {
+      color: var(--md-sys-color-on-surface);
+      background: var(--md-sys-color-surface-container-highest);
+      border-color: var(--md-sys-color-outline-variant);
+    }
   }
 
   &__ip-copy {
@@ -309,14 +346,23 @@ onBeforeUnmount(() => {
     margin-top: $spacing-xs;
     padding-top: $spacing-md;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    // 建议 6：将原本死白的字体颜色降低透明度，退居幕后
     color: rgba(255, 255, 255, 0.45);
     font-size: 13px;
     letter-spacing: 0.3px;
 
+    [data-theme="light"] & {
+      color: var(--md-sys-color-on-surface-variant);
+      border-top-color: var(--md-sys-color-outline-variant);
+    }
+
     .material-symbols-outlined {
       font-size: 16px;
-      color: rgba(255, 255, 255, 0.45);
+      opacity: 0.7;
+
+      [data-theme="light"] & {
+        color: var(--md-sys-color-primary);
+        opacity: 1;
+      }
     }
   }
 

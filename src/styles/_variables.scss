@@ -1,0 +1,34 @@
+/* ============================================
+   SCSS Variables
+   ============================================ */
+
+/* 响应式断点 */
+$breakpoint-sm: 600px;
+$breakpoint-md: 905px;
+$breakpoint-lg: 1240px;
+$breakpoint-xl: 1440px;
+
+/* 间距 */
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+$spacing-3xl: 64px;
+$spacing-4xl: 96px;
+
+/* 容器最大宽度 */
+$container-max-width: 1280px;
+$container-narrow: 960px;
+$container-wide: 1440px;
+
+/* 导航栏高度 */
+$appbar-height: 80px;
+$appbar-height-scrolled: 64px;
+
+/* Z-index 层级 */
+$z-appbar: 1000;
+$z-fab: 900;
+$z-overlay: 1100;
+$z-modal: 1200;

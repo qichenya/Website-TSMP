@@ -1,0 +1,186 @@
+/* ============================================
+   全局样式入口
+   ============================================ */
+
+@use './theme.css';
+@use './_typography.scss';
+@use './_mixins.scss' as *;
+
+/* CSS Reset */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--md-sys-color-surface-container);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-sys-color-outline);
+}
+
+/* 选中颜色 */
+::selection {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+/* MD3 按钮基础样式 */
+.md3-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  height: 40px;
+  padding: 0 $spacing-lg;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  border-radius: var(--md-sys-shape-corner-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* Filled button */
+.md3-btn-filled {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  box-shadow: var(--md-sys-elevation-1);
+
+  &:hover {
+    box-shadow: var(--md-sys-elevation-2);
+    filter: brightness(1.08);
+  }
+
+  &:active {
+    box-shadow: var(--md-sys-elevation-1);
+    filter: brightness(0.92);
+  }
+}
+
+/* Outlined button */
+.md3-btn-outlined {
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+  border: 1px solid var(--md-sys-color-outline);
+
+  &:hover {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    border-color: var(--md-sys-color-primary);
+  }
+}
+
+/* Text button */
+.md3-btn-text {
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+
+  &:hover {
+    background-color: rgba(103, 80, 164, 0.08);
+  }
+}
+
+/* MD3 Chip 标签 */
+.md3-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 $spacing-md;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+  border: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* MD3 图标按钮 */
+.md3-icon-btn {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface-variant);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(103, 80, 164, 0.08);
+  }
+
+  .material-symbols-outlined {
+    font-size: 24px;
+  }
+}
+
+/* 区块通用样式 */
+.section {
+  @include section-padding;
+}
+
+.section-alt {
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+/* 页面 section 的 ID 锚点偏移（补偿固定导航栏高度） */
+section[id] {
+  scroll-margin-top: $appbar-height;
+}

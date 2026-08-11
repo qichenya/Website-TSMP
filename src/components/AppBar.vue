@@ -55,7 +55,11 @@ onBeforeUnmount(() => {
     <div class="app-bar__container">
       <!-- Logo -->
       <router-link to="/" class="app-bar__logo">
-        <span class="app-bar__logo-icon">T</span>
+        <img
+          src="https://assets.trystage.cn/T-icon-light.svg"
+          alt="Trystage Logo"
+          class="app-bar__logo-icon"
+        />
         <span class="app-bar__logo-text">Trystage</span>
       </router-link>
 
@@ -143,14 +147,10 @@ onBeforeUnmount(() => {
     z-index: 1;
 
     &-icon {
-      @include flex-center;
       width: 36px;
       height: 36px;
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
       border-radius: var(--md-sys-shape-corner-medium);
-      font-weight: 700;
-      font-size: 20px;
+      object-fit: contain;
     }
 
     &-text {

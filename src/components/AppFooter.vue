@@ -11,7 +11,7 @@
       <div class="app-footer__brand">
         <span class="app-footer__logo">Trystage</span>
         <span class="app-footer__divider">·</span>
-        <span>完全免费 · 无氪金</span>
+        <span>多版本 - 多玩法 - 公平竞技</span>
       </div>
       <div class="app-footer__info">
         <p class="md3-body-small">© 2026 StarAir Co., LTD · Trystage 服务器</p>

@@ -1,6 +1,5 @@
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ThemeToggle from './ThemeToggle.vue'
@@ -9,32 +8,60 @@ gsap.registerPlugin(ScrollTrigger)
 
 /**
  * 顶部导航栏组件 - MD3 Top App Bar
- * 功能：品牌 Logo、路由导航、移动端汉堡菜单、主题切换
+ * 使用锚点链接实现单页面平滑滚动导航
  * 动画：滚动时收缩高度 + 阴影变化
  */
-const route = useRoute()
-
 const navItems = [
-  { to: '/', label: '首页' },
-  { to: '/game-modes', label: '游戏模式' },
-  { to: '/versions', label: '版本支持' },
-  { to: '/stats', label: '项目实力' },
-  { to: '/join', label: '加入我们' }
+  { href: '#home', label: '首页' },
+  { href: '#game-modes', label: '游戏模式' },
+  { href: '#versions', label: '版本支持' },
+  { href: '#stats', label: '项目实力' },
+  { href: '#join', label: '加入我们' }
 ]
 
 const isMobileMenuOpen = ref(false)
 const appBarRef = ref(null)
+const activeSection = ref('home')
 
-// 路由切换时关闭移动端菜单
-watch(() => route.path, () => {
+/**
+ * 平滑滚动到目标锚点
+ */
+function scrollToSection(href) {
   isMobileMenuOpen.value = false
-})
+  const id = href.replace('#', '')
+  const el = document.getElementById(id)
+  const container = document.querySelector('.default-layout')
+  if (el && container) {
+    container.scrollTo({ top: el.offsetTop, behavior: 'smooth' })
+  }
+}
+
+/**
+ * 监听滚动，更新活跃导航项高亮
+ */
+function updateActiveSection() {
+  const container = document.querySelector('.default-layout')
+  if (!container) return
+  const scrollPos = container.scrollTop + 120
+
+  const sections = navItems.map(item => item.href.replace('#', ''))
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const el = document.getElementById(sections[i])
+    if (el && el.offsetTop <= scrollPos) {
+      activeSection.value = sections[i]
+      return
+    }
+  }
+  activeSection.value = 'home'
+}
 
 onMounted(() => {
+  const container = document.querySelector('.default-layout')
+
   // 滚动时收缩 + 阴影动画
   gsap.to(appBarRef.value, {
     scrollTrigger: {
-      trigger: document.body,
+      trigger: container,
       start: 'top -80px',
       end: 'bottom top',
       toggleClass: { targets: appBarRef.value, className: 'app-bar--scrolled' },
@@ -43,10 +70,19 @@ onMounted(() => {
     },
     duration: 0.3
   })
+
+  // 监听 scroll-snap 容器滚动
+  if (container) {
+    container.addEventListener('scroll', updateActiveSection, { passive: true })
+  }
 })
 
 onBeforeUnmount(() => {
   ScrollTrigger.getAll().forEach(t => t.kill())
+  const container = document.querySelector('.default-layout')
+  if (container) {
+    container.removeEventListener('scroll', updateActiveSection)
+  }
 })
 </script>
 
@@ -54,26 +90,27 @@ onBeforeUnmount(() => {
   <header ref="appBarRef" class="app-bar">
     <div class="app-bar__container">
       <!-- Logo -->
-      <router-link to="/" class="app-bar__logo">
+      <a href="#home" class="app-bar__logo" @click.prevent="scrollToSection('#home')">
         <img
           src="https://assets.trystage.cn/T-icon-light.svg"
           alt="Trystage Logo"
           class="app-bar__logo-icon"
         />
         <span class="app-bar__logo-text">Trystage</span>
-      </router-link>
+      </a>
 
       <!-- 桌面端导航链接 -->
       <nav class="app-bar__nav">
-        <router-link
+        <a
           v-for="item in navItems"
-          :key="item.to"
-          :to="item.to"
+          :key="item.href"
+          :href="item.href"
           class="app-bar__nav-link md3-label-large"
-          :exact="item.to === '/'"
+          :class="{ 'app-bar__nav-link--active': activeSection === item.href.replace('#', '') }"
+          @click.prevent="scrollToSection(item.href)"
         >
           {{ item.label }}
-        </router-link>
+        </a>
       </nav>
 
       <!-- 右侧操作区 -->
@@ -95,15 +132,16 @@ onBeforeUnmount(() => {
     <!-- 移动端下拉菜单 -->
     <Transition name="mobile-menu">
       <nav v-if="isMobileMenuOpen" class="app-bar__mobile-menu">
-        <router-link
+        <a
           v-for="item in navItems"
-          :key="item.to"
-          :to="item.to"
+          :key="item.href"
+          :href="item.href"
           class="app-bar__mobile-link md3-title-medium"
-          :exact="item.to === '/'"
+          :class="{ 'app-bar__mobile-link--active': activeSection === item.href.replace('#', '') }"
+          @click.prevent="scrollToSection(item.href)"
         >
           {{ item.label }}
-        </router-link>
+        </a>
       </nav>
     </Transition>
   </header>
@@ -200,8 +238,8 @@ onBeforeUnmount(() => {
       }
     }
 
-    /* 当前激活页高亮 */
-    &.router-link-exact-active {
+    /* 当前激活区块高亮 */
+    &--active {
       color: var(--md-sys-color-primary);
 
       &::after {
@@ -247,7 +285,7 @@ onBeforeUnmount(() => {
       background-color: var(--md-sys-color-surface-container-highest);
     }
 
-    &.router-link-exact-active {
+    &--active {
       color: var(--md-sys-color-primary);
       background-color: var(--md-sys-color-primary-container);
     }

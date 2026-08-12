@@ -1,21 +1,20 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useThemeStore } from '@/stores/theme'
 import SkeletonCard from './components/SkeletonCard.vue'
 
-gsap.registerPlugin(ScrollTrigger)
+// 全局 ScrollTrigger 默认 scroller
+ScrollTrigger.defaults({ scroller: '.default-layout' })
 
 /**
  * 根组件
- * 管理全局主题、骨架屏加载状态、页面切换动画
+ * 管理全局主题、骨架屏加载状态
  */
 const themeStore = useThemeStore()
 const isLoading = ref(true)
 
 onMounted(() => {
-  // 初始化主题
   document.documentElement.setAttribute('data-theme', themeStore.mode)
 
   // 模拟数据加载（1s 后显示真实内容）
@@ -25,34 +24,8 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  // 清理所有 ScrollTrigger
   ScrollTrigger.getAll().forEach(t => t.kill())
 })
-
-// GSAP 页面过渡动画钩子
-function onBeforeEnter(el) {
-  gsap.set(el, { opacity: 0, y: 40 })
-}
-
-function onEnter(el, done) {
-  gsap.to(el, {
-    opacity: 1,
-    y: 0,
-    duration: 0.4,
-    ease: 'power3.out',
-    onComplete: done
-  })
-}
-
-function onLeave(el, done) {
-  gsap.to(el, {
-    opacity: 0,
-    y: -20,
-    duration: 0.25,
-    ease: 'power2.in',
-    onComplete: done
-  })
-}
 </script>
 
 <template>
@@ -69,18 +42,9 @@ function onLeave(el, done) {
     </div>
   </template>
 
-  <!-- 路由视图（带 GSAP 页面过渡动画） -->
+  <!-- 单页面路由视图 -->
   <template v-else>
-    <router-view v-slot="{ Component, route }">
-      <transition
-        mode="out-in"
-        @before-enter="onBeforeEnter"
-        @enter="onEnter"
-        @leave="onLeave"
-      >
-        <component :is="Component" :key="route.path" />
-      </transition>
-    </router-view>
+    <router-view />
   </template>
 </template>
 

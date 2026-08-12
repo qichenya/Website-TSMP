@@ -54,11 +54,11 @@ function nextTick() {
 </script>
 
 <template>
-  <section id="stats" class="section stats">
+  <div class="stats">
     <div class="stats__container">
       <SectionTitle
         title="项目实力"
-        subtitle="不仅仅是 Minecraft 服务器，更是技术爱好者的聚集地"
+        subtitle="多年积累的技术沉淀，为玩家提供稳定的游戏体验"
       />
 
       <div ref="gridRef" class="stats__grid">
@@ -76,7 +76,7 @@ function nextTick() {
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <style scoped lang="scss">

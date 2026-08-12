@@ -53,7 +53,7 @@ function nextTick() {
 </script>
 
 <template>
-  <section id="versions" class="section section-alt versions">
+  <div class="versions">
     <div class="versions__container">
       <SectionTitle
         title="多版本支持"
@@ -90,7 +90,7 @@ function nextTick() {
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <style scoped lang="scss">

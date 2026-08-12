@@ -56,7 +56,7 @@ function nextTick() {
 </script>
 
 <template>
-  <section id="game-modes" class="section game-modes">
+  <div class="game-modes">
     <div class="game-modes__container">
       <SectionTitle
         title="游戏模式"
@@ -71,7 +71,7 @@ function nextTick() {
         />
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <style scoped lang="scss">

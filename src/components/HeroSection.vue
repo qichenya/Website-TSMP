@@ -1,9 +1,17 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 
-const router = useRouter()
+/**
+ * 平滑滚动到指定区块
+ */
+function scrollToSection(id) {
+  const el = document.getElementById(id)
+  const container = document.querySelector('.default-layout')
+  if (el && container) {
+    container.scrollTo({ top: el.offsetTop, behavior: 'smooth' })
+  }
+}
 
 /**
  * Hero 主视觉区组件
@@ -87,7 +95,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section id="hero" class="hero">
+  <section id="home" class="hero">
     <!-- 背景装饰 -->
     <div class="hero__bg">
       <div class="hero__bg-circle hero__bg-circle--1"></div>
@@ -128,14 +136,14 @@ onBeforeUnmount(() => {
       <div ref="actionsRef" class="hero__actions">
         <button
           class="md3-btn md3-btn-outlined hero__cta"
-          @click="router.push('/game-modes')"
+          @click="scrollToSection('game-modes')"
         >
           <span class="material-symbols-outlined">explore</span>
           探索游戏模式
         </button>
         <button
           class="md3-btn md3-btn-filled hero__cta hero__cta--primary"
-          @click="router.push('/join')"
+          @click="scrollToSection('join')"
         >
           <span class="material-symbols-outlined">login</span>
           立即加入
@@ -150,7 +158,7 @@ onBeforeUnmount(() => {
 
 .hero {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
   @include flex-center;
   flex-direction: column;
   overflow: hidden;
